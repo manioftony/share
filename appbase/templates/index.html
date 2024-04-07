@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Interface</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 100%;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        .chart-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <form action="/" method="post">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="username" placeholder="Search" id="txtSearch">
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary" type="submit">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {% if error %}
+    <div class="row">
+        <div class="col-xs-12">
+            <p class="error"><strong>Error:</strong> {{error}}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>Share name: {{username}}</h1>
+            <h1>Live price: {{liveprice}}</h1>
+            <h1>Count: {{count}}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="chart-container">
+                <canvas id="chartVerticalBar"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script>
+    window.addEventListener('load', function () {
+        var ctx = document.getElementById('chartVerticalBar').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{date|safe}},
+                datasets: [{
+                    label: "Share market",
+                    backgroundColor: 'rgba(245,34,34,.5)',
+                    borderColor: 'rgba(245,34,34,1)',
+                    data: {{data}},
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Chart type: Vertical bar simple'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Mois'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Eur/1000L'
+                        }
+
+                    }]
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
